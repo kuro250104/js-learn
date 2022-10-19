@@ -1,66 +1,131 @@
-const forms= document.querySelector('#forms');
-const nom=document.querySelector('#nom')
-const prenom=document.querySelector('#prenom')
-let occurence = 0;
+const nom = document.querySelector("#nom");
+const prenom = document.querySelector("#prenom");
+const forms = document.querySelector("#forms");
+const tbody = document.getElementById('newRow');
+const table = document.getElementById('table');
 
-forms.addEventListener('submit', function(e){
+let nomTemp = "";
+let prenomTemp = "";
+
+forms.addEventListener("submit", function(e) {
+
     e.preventDefault();
-    occurence  = occurence+ 1;
-    addRow(document.getElementById('newRow'),nom, prenom, occurence);
-    nom.value = ""
-    prenom.value = ""
-    console.log("je marche");
-});
-
-
-
-
-function addRow(elmt, nom, prenom, occurence)
-{
     let tr = document.createElement('tr');
-    elmt.appendChild(tr); 
-
+    tbody.appendChild(tr);
     let tdNom = document.createElement('td');
     tr.appendChild(tdNom);
-    let tdNomValue = document.createTextNode(nom.value);
-    tdNom.appendChild(tdNomValue);
-    tdNom.setAttribute('id', 'nom' + occurence.toString());
-
+    let tdNomTxt = document.createTextNode(nom.value);
+    tdNom.appendChild(tdNomTxt);
+    tdNom.setAttribute('class', 'nom');
 
     let tdPrenom = document.createElement('td');
     tr.appendChild(tdPrenom);
-    let tdPrenomValue = document.createTextNode(prenom.value);
-    tdPrenom.appendChild(tdPrenomValue);
-    tdPrenom.setAttribute('id', 'nrenom' + occurence.toString());
+    let tdPrenomTxt = document.createTextNode(prenom.value);
+    tdPrenom.appendChild(tdPrenomTxt);
+    tdPrenom.setAttribute('class', 'prenom');
 
-    
-    let tdEdit = document.createElement('td');
-    tr.appendChild(tdEdit);
-    let tdEditBtn = document.createElement('button');
-    tdEdit.appendChild(tdEditBtn);
-    let tdEditBtnTxt = document.createTextNode('Modifier');
-    tdEditBtn.appendChild(tdEditBtnTxt);
-    let tdDel = document.createElement('td');
-    tr.appendChild(tdDel);
-    let tdDelBtn = document.createElement('button');
-    tdDel.appendChild(tdDelBtn);
+    let tdAction = document.createElement('td');
+    tr.appendChild(tdAction);
+    tdAction.setAttribute('class', 'action');
 
-    let tdDelBtnTxt = document.createTextNode('Supprimer');
-    tdDelBtn.appendChild(tdDelBtnTxt);
-    tdDelBtn.setAttribute('id', 'del' + occurence.toString());
-    
-    tdDelBtn.addEventListener('click', function(e) {
-        let BtnId = e.currentTarget,
-        trDel = BtnId.parentNode.parentNode;
-        trDel.remove();
+    let tdModifier = document.createElement('td');
+    tdAction.appendChild(tdModifier);
+    let tdModifBtn = document.createElement('button');
+    tdModifier.appendChild(tdModifBtn);
+    let tdModifBtnTxt = document.createTextNode('Modifier');
+    tdModifBtn.appendChild(tdModifBtnTxt);
+    tdModifBtn.setAttribute('class', 'modifier');
+
+    let tdSupp = document.createElement('td');
+    tdAction.appendChild(tdSupp);
+    let tdSuppBtn = document.createElement('button');
+    tdSupp.appendChild(tdSuppBtn);
+    let tdSuppBtnTxt = document.createTextNode('Supprimer');
+    tdSuppBtn.appendChild(tdSuppBtnTxt);
+    tdSuppBtn.setAttribute('class', 'supp');
+
+    let tdValider = document.createElement('td');
+    tdAction.appendChild(tdValider);
+    let tdValiderBtn = document.createElement('button');
+    tdValider.appendChild(tdValiderBtn);
+    let tdValiderBtnTxt = document.createTextNode('Valider');
+    tdValiderBtn.append(tdValiderBtnTxt);
+    tdValiderBtn.setAttribute('class', 'valider');
+    let btnValider = tr.querySelector('.valider');
+    btnValider.style.display = "none";
+
+    tdSuppBtn.addEventListener('click', function(e) {
+
+        e.currentTarget.parentNode.parentNode.parentNode.remove();
     });
 
-    tdEditBtn.addEventListener('click', function(e){
-        let EditId = e.currentTarget
+    tdModifBtn.addEventListener('click', function(e) {
+        let modifBtn = e.currentTarget;
+        let modifTr = modifBtn.parentNode.parentNode.parentNode;
+        let inputNom = modifTr.querySelector('.nom');
+        let inputPrenom = modifTr.querySelector('.prenom');
+
+        nomTemp = modifTr.querySelector('.nom').innerHTML;
+        prenomTemp = modifTr.querySelector('.prenom').innerHTML;
+
+        inputNom.innerHTML = '';
+        inputPrenom.innerHTML = '';
+
+        let inputNomType = document.createElement('input');
+        let inputPrenomType = document.createElement('input');
+
+        inputNomType.setAttribute("type", "text");
+        inputPrenomType.setAttribute("type", "text");
+        inputNomType.setAttribute('class', 'inuputNomClass')
+        inputPrenomType.setAttribute('class', 'inuputPrenomClass')
+
+        inputNomType.value=nomTemp;
+        inputPrenomType.value=prenomTemp;
+        inputNom.append(inputNomType);
+        inputPrenom.append(inputPrenomType);
+
+        let btnModif = modifTr.querySelector('.modifier');
+        btnModif.style.display = "none";
+
+        let btnSupp = modifTr.querySelector('.supp');
+        btnSupp.style.display = "none";
+
+        let btnValider = modifTr.querySelector('.valider');
+        btnValider.style.display = "block";
+    });
+    tdValiderBtn.addEventListener('click', function(e) {
+        let validerBtn = e.currentTarget;
+        let validerTr = validerBtn.parentNode.parentNode.parentNode;
+        let btnModif = validerTr.querySelector('.modifier');
+        btnModif.style.display = "block";
+
+        let btnSupp = validerTr.querySelector('.supp');
+        btnSupp.style.display = "block";
+
+        let btnValider = validerTr.querySelector('.valider');
+        btnValider.style.display = "none";
+
+        let NomValeur = validerTr.querySelector('.inputNomClass');
+        let PrenomValeur = validerTr.querySelector('.inputPreomClass');
+
+        nomTemp = NomValeur.value;
+        prenomTemp = PrenomValeur.value; 
+
+        let modifNom = validerTr.querySelector('.nom');
+        let modifPrenom = validerTr.querySelector('.prenom');
+
+        modifNom.innerHTML = '';
+        modifPrenom.innerHTML = '';
         
-
+        let tdNomTxt = document.createTextNode(nomTemp);
+        modifNom.appendChild(tdNomTxt);
+        modifNom.setAttribute('class', 'nom');
+        
+        let tdPrenomTxt = document.createTextNode(prenomTemp);
+        modifPrenom.appendChild(tdPrenomTxt);
+        modifPrenom.setAttribute('class', 'prenom');
     });
-    
 
-
-}
+    nom.value = "";
+    prenom.value = "";
+});
