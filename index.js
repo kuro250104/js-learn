@@ -1,3 +1,4 @@
+
 const nom = document.querySelector("#nom");
 const prenom = document.querySelector("#prenom");
 const forms = document.querySelector("#forms");
@@ -12,50 +13,42 @@ forms.addEventListener("submit", function(e) {
     e.preventDefault();
     let tr = document.createElement('tr');
     tbody.appendChild(tr);
-    let tdNom = document.createElement('td');
+
+    //change
+    let tdNom = createElement('td',nom, 'nom');
     tr.appendChild(tdNom);
-    let tdNomTxt = document.createTextNode(nom.value);
-    tdNom.appendChild(tdNomTxt);
-    tdNom.setAttribute('class', 'nom');
 
-    let tdPrenom = document.createElement('td');
+    let tdPrenom = createElement('td',prenom, 'prenom');
     tr.appendChild(tdPrenom);
-    let tdPrenomTxt = document.createTextNode(prenom.value);
-    tdPrenom.appendChild(tdPrenomTxt);
-    tdPrenom.setAttribute('class', 'prenom');
+    // let tdPrenomTxt = document.createTextNode(prenom.value);
+    // tdPrenom.appendChild(tdPrenomTxt);
+    // tdPrenom.setAttribute('class', 'prenom');
 
-    let tdAction = document.createElement('td');
+    let tdAction = createElement('td',null, 'action');
     tr.appendChild(tdAction);
-    tdAction.setAttribute('class', 'action');
+    // tdAction.setAttribute('class', 'action');
 
-    let tdModifier = document.createElement('td');
+    let tdModifier = createElement('td');
     tdAction.appendChild(tdModifier);
-    let tdModifBtn = document.createElement('button');
+    let tdModifBtn = createElement('button','Modifier',  'modifier');
     tdModifier.appendChild(tdModifBtn);
-    let tdModifBtnTxt = document.createTextNode('Modifier');
-    tdModifBtn.appendChild(tdModifBtnTxt);
-    tdModifBtn.setAttribute('class', 'modifier');
+    
 
-    let tdSupp = document.createElement('td');
+    let tdSupp = createElement('td');
     tdAction.appendChild(tdSupp);
-    let tdSuppBtn = document.createElement('button');
+    let tdSuppBtn = createElement('button', 'Supprimer', 'supp');
     tdSupp.appendChild(tdSuppBtn);
-    let tdSuppBtnTxt = document.createTextNode('Supprimer');
-    tdSuppBtn.appendChild(tdSuppBtnTxt);
-    tdSuppBtn.setAttribute('class', 'supp');
+   
 
-    let tdValider = document.createElement('td');
+    let tdValider = createElement('td');
     tdAction.appendChild(tdValider);
-    let tdValiderBtn = document.createElement('button');
+    let tdValiderBtn = createElement('button','Valider', 'valider');
     tdValider.appendChild(tdValiderBtn);
-    let tdValiderBtnTxt = document.createTextNode('Valider');
-    tdValiderBtn.append(tdValiderBtnTxt);
-    tdValiderBtn.setAttribute('class', 'valider');
+    
     let btnValider = tr.querySelector('.valider');
     btnValider.style.display = "none";
 
     tdSuppBtn.addEventListener('click', function(e) {
-
         e.currentTarget.parentNode.parentNode.parentNode.remove();
     });
 
@@ -71,18 +64,11 @@ forms.addEventListener("submit", function(e) {
         inputNom.innerHTML = '';
         inputPrenom.innerHTML = '';
 
-        let inputNomType = document.createElement('input');
-        let inputPrenomType = document.createElement('input');
-
-        inputNomType.setAttribute("type", "text");
-        inputPrenomType.setAttribute("type", "text");
-        inputNomType.setAttribute('class', 'inuputNomClass')
-        inputPrenomType.setAttribute('class', 'inuputPrenomClass')
-
-        inputNomType.value=nomTemp;
-        inputPrenomType.value=prenomTemp;
+        let inputNomType = createElement('input', nomTemp, 'inputNomClass');
+        let inputPrenomType = createElement('input', prenomTemp, 'inputPrenomClass');
         inputNom.append(inputNomType);
         inputPrenom.append(inputPrenomType);
+
 
         let btnModif = modifTr.querySelector('.modifier');
         btnModif.style.display = "none";
@@ -94,33 +80,35 @@ forms.addEventListener("submit", function(e) {
         btnValider.style.display = "block";
     });
     tdValiderBtn.addEventListener('click', function(e) {
+        
         let validerBtn = e.currentTarget;
         let validerTr = validerBtn.parentNode.parentNode.parentNode;
+        
         let btnModif = validerTr.querySelector('.modifier');
-        btnModif.style.display = "block";
-
+        btnModif.style.display = "inline";
         let btnSupp = validerTr.querySelector('.supp');
-        btnSupp.style.display = "block";
-
+        btnSupp.style.display = "inline";
         let btnValider = validerTr.querySelector('.valider');
         btnValider.style.display = "none";
-
-        let NomValeur = validerTr.querySelector('.inputNomClass');
-        let PrenomValeur = validerTr.querySelector('.inputPreomClass');
-
-        nomTemp = NomValeur.value;
-        prenomTemp = PrenomValeur.value; 
+        
+        let nomValeur = validerTr.querySelector('.inputNomClass');
+        let prenomValeur = validerTr.querySelector('.inputPrenomClass');
+        //error
+        
+        nomTemp = nomValeur.value;
+        prenomTemp = prenomValeur.value;
+        
+        
 
         let modifNom = validerTr.querySelector('.nom');
         let modifPrenom = validerTr.querySelector('.prenom');
-
         modifNom.innerHTML = '';
         modifPrenom.innerHTML = '';
-        
+
         let tdNomTxt = document.createTextNode(nomTemp);
         modifNom.appendChild(tdNomTxt);
         modifNom.setAttribute('class', 'nom');
-        
+    
         let tdPrenomTxt = document.createTextNode(prenomTemp);
         modifPrenom.appendChild(tdPrenomTxt);
         modifPrenom.setAttribute('class', 'prenom');
@@ -129,3 +117,50 @@ forms.addEventListener("submit", function(e) {
     nom.value = "";
     prenom.value = "";
 });
+
+
+//change
+function createTd(text = null, classe = null) {
+    let td = document.createElement("td");
+    if(text != null) {
+        td.innerText = text.value;
+    }
+    if(classe != null) {
+        td.classList.add(classe);
+    }
+    return td
+}
+
+function createButton(text = null, classe = null) {
+    let button = document.createElement("button");
+    if(text !=null) {
+        button.innerText = text;
+    }
+    if(classe != null ){
+        button.classList.add(classe);
+    }
+    return button
+}
+function createElement(element, text = null, classe = null, type= 'text' ) {
+    if(element == 'td'){
+        return createTd(text, classe)
+    }
+    if(element == 'button') {
+        return createButton(text, classe)
+    }
+    if(element == 'input') {
+        return createInput(text, classe, type);
+    }
+}
+
+function createInput(nom = null, classe = null, type = 'text') {
+    let input = document.createElement("input");
+    if(nom != null) {
+        input.value = nom;
+    }
+    input.setAttribute("type", type);
+    if(classe != null) {
+        input.classList.add(classe);
+    }
+    return input
+}
